@@ -4,7 +4,18 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(start \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\SeniorCare_AI_Presentation_Content.md\")",
-      "Bash(start \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\SeniorCare_AI_Presentation.html\")"
+      "Bash(start \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\SeniorCare_AI_Presentation.html\")",
+      "Bash(git rm *)",
+      "Bash(Test-Path \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\presentation\\\\.git\")",
+      "Bash(rm -rf \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\presentation\\\\.git\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git ls-tree *)",
+      "Bash(git config *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\MSI\\Downloads\\presentation\\presentation\\.git"
     ]
   }
 }
