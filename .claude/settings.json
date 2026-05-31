@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/MSI/Downloads/last_version_pfe/ISI-LaTeX-Template-master/**)",
+      "Read(//tmp/pptx_extract/extracted/**)",
+      "Read(//tmp/pptx_extract/extracted/ppt/**)"
+    ]
+  }
+}

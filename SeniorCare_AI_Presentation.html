@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeniorCare AI — PFE 2025–2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0B1426;
+  --surface:  #121F35;
+  --card:     #1A2D45;
+  --border:   rgba(255,255,255,0.08);
+  --blue:     #4A9EFF;
+  --teal:     #00D4AA;
+  --amber:    #FFB84D;
+  --red:      #FF6B6B;
+  --green:    #4ECB71;
+  --purple:   #A78BFA;
+  --text:     #E8F4FD;
+  --muted:    #7A9BBD;
+  --radius:   12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── SLIDE ENGINE ── */
+.slide { display:none; height:100vh; flex-direction:column; animation: fadeSlide .35s ease; }
+.slide.active { display:flex; }
+@keyframes fadeSlide {
+  from { opacity:0; transform:translateX(20px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  height: 52px;
+}
+.topbar-left { display:flex; align-items:center; gap:12px; }
+.isitcom-badge {
+  display:flex; align-items:center; gap:8px;
+  background: rgba(74,158,255,.12);
+  border: 1px solid rgba(74,158,255,.25);
+  border-radius: 8px;
+  padding: 4px 12px;
+}
+.isitcom-badge img { height:22px; object-fit:contain; }
+.isitcom-badge span { font-size:11px; color:var(--blue); font-weight:600; letter-spacing:.3px; }
+.topbar-title { font-size:12px; color:var(--muted); font-weight:500; }
+.slide-num {
+  font-size:11px; color:var(--muted);
+  background: var(--card);
+  padding:4px 12px; border-radius:20px;
+  font-family:'JetBrains Mono',monospace;
+  border: 1px solid var(--border);
+}
+
+/* ── BODY LAYOUT ── */
+.slide-body { display:flex; flex:1; overflow:hidden; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:190px; flex-shrink:0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 0;
+  display:flex; flex-direction:column; gap:1px;
+  overflow-y:auto;
+}
+.sidebar-sec {
+  padding: 7px 16px;
+  font-size:10.5px; color:var(--muted);
+  border-left: 2px solid transparent;
+  line-height:1.35;
+  cursor:default;
+  transition: all .15s;
+}
+.sidebar-sec.on {
+  color: var(--text);
+  border-left-color: var(--amber);
+  background: rgba(255,184,77,.06);
+  font-weight:600;
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  flex:1; padding:28px 36px;
+  overflow-y:auto;
+  background: var(--bg);
+}
+
+.slide-title {
+  font-size:24px; font-weight:800;
+  color: var(--text);
+  margin-bottom:6px;
+  line-height:1.2;
+}
+.slide-tag {
+  display:inline-block;
+  font-size:10px; font-weight:600;
+  color: var(--amber);
+  background: rgba(255,184,77,.1);
+  border: 1px solid rgba(255,184,77,.25);
+  border-radius:20px;
+  padding: 2px 10px;
+  margin-bottom:18px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+hr.divider { border:none; border-top:1px solid var(--border); margin-bottom:18px; }
+
+/* ── CHIPS / BADGES ── */
+.chip {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 11px; border-radius:20px; font-size:11px; font-weight:600;
+  border: 1px solid; margin:3px;
+}
+.chip.blue  { background:rgba(74,158,255,.1); border-color:rgba(74,158,255,.3); color:var(--blue); }
+.chip.teal  { background:rgba(0,212,170,.1); border-color:rgba(0,212,170,.3); color:var(--teal); }
+.chip.amber { background:rgba(255,184,77,.1); border-color:rgba(255,184,77,.3); color:var(--amber); }
+.chip.purple{ background:rgba(167,139,250,.1); border-color:rgba(167,139,250,.3); color:var(--purple); }
+.chip.green { background:rgba(78,203,113,.1); border-color:rgba(78,203,113,.3); color:var(--green); }
+.chip.red   { background:rgba(255,107,107,.1); border-color:rgba(255,107,107,.3); color:var(--red); }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.card.accent-blue   { border-top:3px solid var(--blue); }
+.card.accent-teal   { border-top:3px solid var(--teal); }
+.card.accent-purple { border-top:3px solid var(--purple); }
+.card.accent-amber  { border-top:3px solid var(--amber); }
+.card.accent-green  { border-top:3px solid var(--green); }
+
+.card-title {
+  font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.7px; margin-bottom:10px;
+  display:flex; align-items:center; gap:6px;
+}
+.card-title.blue   { color:var(--blue); }
+.card-title.teal   { color:var(--teal); }
+.card-title.purple { color:var(--purple); }
+.card-title.amber  { color:var(--amber); }
+.card-title.green  { color:var(--green); }
+
+/* ── BULLET LIST ── */
+.blist { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.blist li {
+  display:flex; align-items:flex-start; gap:9px;
+  font-size:13px; color:#C5DDEF; line-height:1.5;
+  padding:9px 12px;
+  background:rgba(255,255,255,.03);
+  border-radius:8px;
+  border-left:2px solid var(--amber);
+}
+.blist li strong { color:var(--text); }
+.blist li .ico { flex-shrink:0; font-size:15px; margin-top:1px; }
+
+/* ── TABLE ── */
+.tbl { width:100%; border-collapse:collapse; font-size:12px; }
+.tbl th {
+  background:var(--card); color:var(--amber);
+  padding:9px 12px; text-align:left;
+  border-bottom:1px solid rgba(255,184,77,.3);
+  font-size:10.5px; text-transform:uppercase; letter-spacing:.5px;
+  font-weight:700;
+}
+.tbl td {
+  padding:8px 12px; border-bottom:1px solid var(--border);
+  color:#C5DDEF; vertical-align:middle;
+}
+.tbl tr:hover td { background:rgba(74,158,255,.04); }
+.ok  { color:var(--green); font-weight:700; }
+.no  { color:var(--red); }
+.semi{ color:var(--amber); }
+code { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--amber); background:rgba(255,184,77,.1); padding:1px 5px; border-radius:4px; }
+
+/* ── 3-COL / 2-COL GRIDS ── */
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; }
+.g5 { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+
+/* ── HIGHLIGHT QUOTE ── */
+.quote {
+  background:rgba(74,158,255,.06); border:1px solid rgba(74,158,255,.2);
+  border-left:3px solid var(--blue);
+  border-radius:0 10px 10px 0;
+  padding:14px 18px; font-size:13px; color:var(--text); line-height:1.65;
+  margin-bottom:16px;
+}
+
+/* ── IMAGE ── */
+.img-box {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.img-box img { width:100%; height:100%; object-fit:contain; }
+
+/* ── METRIC CARD ── */
+.metric {
+  background:rgba(78,203,113,.07);
+  border:1px solid rgba(78,203,113,.25);
+  border-radius:10px;
+  padding:14px 16px;
+  display:flex; align-items:center; gap:14px;
+}
+.metric .val { font-size:26px; font-weight:900; color:var(--green); line-height:1; }
+.metric .lbl { font-size:11px; color:var(--muted); margin-top:3px; }
+
+/* ── SPRINT CARD ── */
+.sprint {
+  border-radius:10px; padding:14px 16px;
+  border-top:3px solid;
+}
+.sprint.s1 { background:rgba(74,158,255,.08); border-color:var(--blue); }
+.sprint.s2 { background:rgba(167,139,250,.08); border-color:var(--purple); }
+.sprint.s3 { background:rgba(0,212,170,.08); border-color:var(--teal); }
+.sprint .snum { font-size:10px; text-transform:uppercase; letter-spacing:1px; opacity:.6; margin-bottom:4px; }
+.sprint .stitle { font-size:13px; font-weight:700; margin-bottom:4px; }
+.sprint .sdur { font-size:11px; color:var(--amber); margin-bottom:8px; }
+.sprint ul { list-style:none; }
+.sprint ul li { font-size:11px; color:#9CB8D5; padding:2px 0; }
+.sprint ul li::before { content:"▸ "; color:var(--amber); }
+
+/* ── ACTOR CARD ── */
+.actor {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:14px 10px; text-align:center;
+  transition:all .2s;
+}
+.actor:hover { border-color:var(--blue); background:rgba(74,158,255,.08); }
+.actor .aico { font-size:28px; margin-bottom:8px; }
+.actor .aname { font-size:12px; font-weight:700; color:var(--amber); margin-bottom:4px; }
+.actor .adesc { font-size:10px; color:var(--muted); line-height:1.4; }
+
+/* ── SENSOR CARD ── */
+.sensor {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.sensor img { width:100%; height:80px; object-fit:contain; background:#0D1B2A; padding:8px; }
+.sensor .sinfo { padding:10px; }
+.sensor .sname { font-size:11px; font-weight:700; color:var(--blue); margin-bottom:3px; }
+.sensor .sfunc { font-size:10px; color:var(--muted); }
+
+/* ── FLOW ARROWS ── */
+.flow {
+  display:flex; align-items:center; justify-content:center;
+  gap:8px; flex-wrap:wrap; font-size:12px;
+}
+.flow-node {
+  background:var(--card); border:1px solid var(--border);
+  padding:8px 14px; border-radius:8px; font-weight:600; font-size:12px;
+  white-space:nowrap;
+}
+.flow-node.blue   { border-color:rgba(74,158,255,.4); color:var(--blue); }
+.flow-node.teal   { border-color:rgba(0,212,170,.4);  color:var(--teal); }
+.flow-node.purple { border-color:rgba(167,139,250,.4);color:var(--purple); }
+.flow-arrow { color:var(--amber); font-size:16px; }
+
+/* ── PLAN ITEMS ── */
+.plan-item {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:16px 18px;
+  display:flex; align-items:center; gap:14px;
+  transition:all .2s;
+}
+.plan-item:hover { border-color:var(--amber); background:rgba(255,184,77,.05); }
+.plan-num {
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),#e07b00);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:15px; color:#0B1426; flex-shrink:0;
+}
+.plan-txt { font-size:13px; color:var(--text); font-weight:500; }
+
+/* ══════════════════════════════════════════
+   SLIDE 1 — TITLE
+══════════════════════════════════════════ */
+.s1-bg {
+  flex:1; display:flex;
+  background: radial-gradient(ellipse at 30% 50%, rgba(74,158,255,.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(0,212,170,.08) 0%, transparent 50%),
+              var(--bg);
+}
+.s1-left {
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center; padding:48px 56px;
+}
+.s1-right {
+  width:320px; background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex; flex-direction:column;
+  justify-content:center; padding:32px 28px; gap:16px;
+}
+.s1-eyebrow {
+  font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:2px; color:var(--teal); margin-bottom:12px;
+}
+.s1-title {
+  font-size:36px; font-weight:900; line-height:1.15;
+  color:var(--text); margin-bottom:14px;
+}
+.s1-title span { color:var(--amber); }
+.s1-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:28px; }
+.s1-divider { width:60px; height:3px; background:var(--amber); border-radius:2px; margin-bottom:24px; }
+.s1-meta { font-size:13px; color:var(--muted); line-height:2; }
+.s1-meta strong { color:var(--text); font-weight:600; }
+.info-card {
+  background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:12px 14px;
+}
+.info-card .lbl { font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--amber); margin-bottom:5px; }
+.info-card .val { font-size:12px; color:var(--text); font-weight:600; line-height:1.4; }
+.info-card .sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* ══════════════════════════════════════════
+   PERSP CARDS
+══════════════════════════════════════════ */
+.persp-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:16px 18px;
+}
+.persp-card .ptitle {
+  font-size:13px; font-weight:700; color:var(--amber);
+  margin-bottom:8px; display:flex; align-items:center; gap:7px;
+}
+.persp-card .pdesc { font-size:12px; color:var(--muted); line-height:1.55; }
+
+/* ── NAVIGATION ── */
+.nav {
+  position:fixed; bottom:0; left:0; right:0;
+  background:rgba(11,20,38,.96);
+  border-top:1px solid var(--border);
+  padding:10px 24px;
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  backdrop-filter:blur(12px);
+  z-index:999;
+}
+.nbtn {
+  background:var(--card); border:1px solid var(--border);
+  color:var(--text); padding:7px 20px; border-radius:20px;
+  cursor:pointer; font-size:12px; font-weight:600; font-family:inherit;
+  transition:all .2s;
+}
+.nbtn:hover:not(:disabled) { background:var(--amber); color:#0B1426; border-color:var(--amber); }
+.nbtn:disabled { opacity:.3; cursor:not-allowed; }
+.dots { display:flex; gap:5px; align-items:center; }
+.dot {
+  width:6px; height:6px; border-radius:3px;
+  background:rgba(255,255,255,.2); cursor:pointer; transition:all .2s;
+}
+.dot.on { background:var(--amber); width:18px; }
+.dot:hover:not(.on) { background:rgba(255,184,77,.5); }
+.kh { position:fixed; bottom:54px; right:18px; font-size:10px; color:rgba(255,255,255,.25); }
+
+/* scrollbar */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,.15); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 1 — TITRE                                               -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide active" data-n="1">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="isitcom-badge">
+        <img src="images/logo_isitcom.jpeg" alt="ISITCOM" onerror="this.style.display='none'">
+        <span>ISITCOM · Université de Sousse</span>
+      </div>
+    </div>
+    <div class="topbar-title">Présentation du Projet de Fin d'Études</div>
+    <div class="slide-num">01 / 17</div>
+  </div>
+  <div class="s1-bg">
+    <div class="s1-left">
+      <div class="s1-eyebrow">Projet de Fin d'Études · 2025 – 2026</div>
+      <div class="s1-title">SeniorCare <span>AI</span><br>Bracelet Intelligent pour la Surveillance<br>des Personnes Âgées</div>
+      <div class="s1-divider"></div>
+      <div class="s1-chips">
+        <span class="chip blue">ESP32</span>
+        <span class="chip teal">Flutter</span>
+        <span class="chip amber">Supabase</span>
+        <span class="chip purple">IoT</span>
+        <span class="chip green">ML</span>
+        <span class="chip blue">GPS</span>
+        <span class="chip teal">GSM</span>
+        <span class="chip amber">PCB Design</span>
+      </div>
+      <div class="s1-meta">
+        <strong>Réalisé par :</strong> Mohammed Akrem BEN ABDESSALEM<br>
+        <strong>Diplôme :</strong> Licence en Ingénierie des Systèmes Informatiques · IoT & Systèmes Embarqués
+      </div>
+    </div>
+    <div class="s1-right">
+      <div class="info-card">
+        <div class="lbl">Société d'accueil</div>
+        <div class="val">SmartLab</div>
+        <div class="sub">Faculté de Médecine de Monastir</div>
+      </div>
+      <div class="info-card">
+        <div class="lbl">Encadrante académique</div>
+        <div class="val">Mme Rana EZZINE</div>
+        <div class="sub">Maître Assistante — ISITCOM</div>
+      </div>
+      <div class="info-card">
+        <div class="lbl">Encadrant professionnel</div>
+        <div class="val">M. Racha ZAIBI</div>
+        <div class="sub">Ingénieur R&D — SmartLab</div>
+      </div>
+      <div style="text-align:center;margin-top:6px;">
+        <img src="images/Lab.jpg" style="height:60px;object-fit:contain;opacity:.8;" onerror="this.style.display='none'" alt="SmartLab">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 2 — PLAN                                                -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="2">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Plan</div>
+    <div class="slide-num">02 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="content" style="display:flex;flex-direction:column;justify-content:center;max-width:860px;margin:0 auto;width:100%;">
+      <div class="slide-title" style="text-align:center;margin-bottom:6px;">Plan de la Présentation</div>
+      <div style="text-align:center;margin-bottom:28px;"><span class="chip amber">6 Sections · 17 Slides</span></div>
+      <div class="g2" style="gap:14px;">
+        <div class="plan-item"><div class="plan-num">1</div><div class="plan-txt">Introduction — Organisme d'accueil</div></div>
+        <div class="plan-item"><div class="plan-num">2</div><div class="plan-txt">Problématique et Solution Proposée</div></div>
+        <div class="plan-item"><div class="plan-num">3</div><div class="plan-txt">Méthodologie de Travail</div></div>
+        <div class="plan-item"><div class="plan-num">4</div><div class="plan-txt">Étude Conceptuelle</div></div>
+        <div class="plan-item"><div class="plan-num">5</div><div class="plan-txt">Réalisation</div></div>
+        <div class="plan-item"><div class="plan-num">6</div><div class="plan-txt">Conclusion et Perspectives</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 3 — INTRODUCTION · ORGANISME                           -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="3">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Introduction</div>
+    <div class="slide-num">03 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec on">1. Introduction (1/1)</div>
+      <div class="sidebar-sec">2. Problématique & Solution</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Organisme d'accueil</div>
+      <div class="slide-tag">SmartLab · FMM</div>
+      <div style="display:flex;gap:20px;align-items:flex-start;">
+        <div style="flex:1;">
+          <div class="quote">
+            <strong>SmartLab</strong> est une Unité de Service Commun et de Recherche (USCR) rattachée à la <strong>Faculté de Médecine de Monastir</strong>, certifiée <span style="color:var(--amber)">ISO 21001</span>. Fondée pour catalyser l'innovation à la croisée de la médecine et des technologies.
+          </div>
+          <div class="g3" style="gap:10px;">
+            <div class="card accent-blue">
+              <div class="card-title blue">🔬 IoT & Santé</div>
+              <ul style="list-style:none;font-size:11.5px;color:var(--muted);line-height:1.8;">
+                <li>▸ Dispositifs portables (wearables)</li>
+                <li>▸ Capteurs biométriques</li>
+                <li>▸ Surveillance à distance</li>
+              </ul>
+            </div>
+            <div class="card accent-teal">
+              <div class="card-title teal">🧪 R&D Médical</div>
+              <ul style="list-style:none;font-size:11.5px;color:var(--muted);line-height:1.8;">
+                <li>▸ Applications cliniques</li>
+                <li>▸ Normes de santé strictes</li>
+                <li>▸ Automatisation médicale</li>
+              </ul>
+            </div>
+            <div class="card accent-purple">
+              <div class="card-title purple">💡 Innovation</div>
+              <ul style="list-style:none;font-size:11.5px;color:var(--muted);line-height:1.8;">
+                <li>▸ Technologies émergentes</li>
+                <li>▸ Laboratoires de pointe</li>
+                <li>▸ Amélioration des soins</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="width:160px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;align-items:center;">
+          <div class="img-box" style="width:140px;height:140px;border-radius:12px;">
+            <img src="images/Lab.jpg" alt="SmartLab">
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:center;">Logo SmartLab<br>FMM · Monastir</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 4 — PROBLÉMATIQUE                                       -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="4">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Problématique</div>
+    <div class="slide-num">04 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec on">2. Problématique (1/6)</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Problématique</div>
+      <div class="slide-tag">Contexte · Enjeux · Risques</div>
+      <ul class="blist">
+        <li><span class="ico">📈</span><div><strong>Vieillissement de la population :</strong> Le maintien à domicile des seniors crée un défi croissant pour les familles et le corps médical, exigeant une surveillance médicale continue.</div></li>
+        <li><span class="ico">⏱️</span><div><strong>Méthodes traditionnelles insuffisantes :</strong> Les contrôles manuels intermittents entraînent des <strong>retards dans la détection des anomalies</strong> et une lourde charge pour les aidants.</div></li>
+        <li><span class="ico">⚠️</span><div><strong>Risques critiques non couverts :</strong> Chutes non détectées · Troubles cardiaques sans surveillance · Absence de localisation GPS en cas d'urgence ou d'errance.</div></li>
+        <li><span class="ico">❌</span><div><strong>Conséquence directe :</strong> Mise en danger de la <strong>sécurité</strong> et de la <strong>qualité de vie</strong> des personnes âgées.</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 5 — SOLUTION PROPOSÉE                                   -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="5">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Solution Proposée</div>
+    <div class="slide-num">05 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec on">2. Solution Proposée (2/6)</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Solution Proposée — SeniorCare AI</div>
+      <div class="slide-tag">Système · Autonome · Complet</div>
+      <div class="quote">
+        <strong>SeniorCare AI</strong> : Système de télésurveillance médicale <strong>intelligent et autonome</strong>, combinant un bracelet IoT, une application mobile multi-rôles et un backend cloud sécurisé.
+      </div>
+      <div class="g3" style="gap:12px;">
+        <div class="card accent-blue">
+          <div class="card-title blue">⌚ Bracelet IoT</div>
+          <ul style="list-style:none;font-size:11.5px;color:var(--muted);line-height:2;">
+            <li>▸ FC + SpO₂ (MAX30102)</li>
+            <li>▸ Température IR (MLX90614)</li>
+            <li>▸ Détection de chute (MPU6050)</li>
+            <li>▸ SMS GSM autonome (SIM800L)</li>
+            <li>▸ Localisation GPS (NEO-6M)</li>
+            <li>▸ Affichage OLED (SSD1306)</li>
+          </ul>
+        </div>
+        <div class="card accent-purple">
+          <div class="card-title purple">📱 Application Mobile</div>
+          <ul style="list-style:none;font-size:11.5px;color:var(--muted);line-height:2;">
+            <li>▸ Auth JWT multi-rôles</li>
+            <li>▸ Médecin : dossiers + PDF</li>
+            <li>▸ Famille : surveillance GPS</li>
+            <li>▸ Géofencing 50–500 m</li>
+            <li>▸ Courbes historiques</li>
+            <li>▸ Journal des alertes</li>
+          </ul>
+        </div>
+        <div class="card accent-teal">
+          <div class="card-title teal">☁️ Cloud Supabase</div>
+          <ul style="list-style:none;font-size:11.5px;color:var(--muted);line-height:2;">
+            <li>▸ PostgreSQL · 7 tables</li>
+            <li>▸ Edge Functions serverless</li>
+            <li>▸ Realtime WebSocket</li>
+            <li>▸ JWT + Row-Level Security</li>
+            <li>▸ Détection des anomalies</li>
+            <li>▸ Sync seuils cloud→bracelet</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 6 — COMPARAISON                                         -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="6">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Critique de l'existant</div>
+    <div class="slide-num">06 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec on">2. Solutions existantes (3/6)</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Analyse Comparative des Solutions Existantes</div>
+      <div class="slide-tag">Apple Watch · BioIntelliSense · Philips Lifeline</div>
+      <div style="display:flex;gap:14px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <img src="images/Apple-Watch-Logo-Vector.png" style="height:32px;object-fit:contain;" onerror="this.style.display='none'" alt="">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <img src="images/Bio.png" style="height:32px;object-fit:contain;" onerror="this.style.display='none'" alt="">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <img src="images/lifeline.jpeg" style="height:32px;object-fit:contain;" onerror="this.style.display='none'" alt="">
+        </div>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Critère</th>
+            <th>Apple Watch</th>
+            <th>BioIntelliSense</th>
+            <th>Philips Lifeline</th>
+            <th style="color:var(--teal);">✦ SeniorCare AI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dépendance matérielle</td><td><span class="no">✗ iPhone requis</span></td><td><span class="no">✗ Hub dédié</span></td><td><span class="no">✗ Bouton seul</span></td><td><span class="ok">✓ Autonome</span></td></tr>
+          <tr><td>Alertes autonomes</td><td><span class="no">✗ Sans iPhone</span></td><td><span class="no">✗ Sans réseau</span></td><td><span class="semi">Bouton manuel</span></td><td><span class="ok">✓ SMS GSM direct</span></td></tr>
+          <tr><td>Suivi médecin</td><td><span class="semi">Limité</span></td><td><span class="semi">Limité</span></td><td><span class="no">✗ Absent</span></td><td><span class="ok">✓ Dossier + PDF</span></td></tr>
+          <tr><td>Géofencing GPS</td><td><span class="semi">Basique</span></td><td><span class="no">✗ Absent</span></td><td><span class="no">✗ Absent</span></td><td><span class="ok">✓ 50–500 m config.</span></td></tr>
+          <tr><td>Rapport médical PDF</td><td><span class="no">✗ Absent</span></td><td><span class="semi">Partiel</span></td><td><span class="no">✗ Absent</span></td><td><span class="ok">✓ Exportable</span></td></tr>
+          <tr><td>Coût</td><td><span class="no">Très élevé</span></td><td><span class="no">Abonnement coûteux</span></td><td><span class="semi">Abonnement mensuel</span></td><td><span class="ok">✓ Solution ouverte</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 7 — BESOINS FONCTIONNELS                                -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="7">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Besoins Fonctionnels</div>
+    <div class="slide-num">07 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec on">2. Besoins Fonctionnels (4/6)</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Besoins Fonctionnels</div>
+      <div class="slide-tag">22 User Stories · MoSCoW</div>
+      <ul class="blist">
+        <li><span class="ico">🔐</span><div><strong>Authentification JWT</strong> — Connexion sécurisée avec redirection automatique selon le rôle (médecin / famille)</div></li>
+        <li><span class="ico">👥</span><div><strong>Gestion des patients</strong> — Création de dossiers, génération automatique du code SC-XXXX, accès famille via ce code</div></li>
+        <li><span class="ico">💓</span><div><strong>Surveillance temps réel</strong> — BPM, SpO₂, Température, Détection de chute mis à jour automatiquement</div></li>
+        <li><span class="ico">📲</span><div><strong>Alertes SMS géolocalisées</strong> — Envoi autonome via module GSM SIM800L avec lien Google Maps intégré</div></li>
+        <li><span class="ico">🔄</span><div><strong>Synchronisation des seuils</strong> — Récupération dynamique depuis Supabase sans reprogrammation du firmware</div></li>
+        <li><span class="ico">🩺</span><div><strong>Espace Médecin</strong> — Courbes historiques (24h / 7j / 30j), notes médicales confidentielles, rapport PDF exportable</div></li>
+        <li><span class="ico">👨‍👩‍👧</span><div><strong>Espace Famille</strong> — Localisation GPS sur carte, géofencing (50–500 m), gestion des contacts d'urgence</div></li>
+        <li><span class="ico">📟</span><div><strong>Affichage OLED local</strong> — Données biométriques, état GPS et alertes affichés directement sur le bracelet</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 8 — BESOINS NON FONCTIONNELS                            -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="8">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Besoins Non Fonctionnels</div>
+    <div class="slide-num">08 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec on">2. Besoins NF (5/6)</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Besoins Non Fonctionnels</div>
+      <div class="slide-tag">Performance · Sécurité · Fiabilité</div>
+      <table class="tbl">
+        <thead><tr><th>Critère</th><th>Exigence</th><th>Technologie</th></tr></thead>
+        <tbody>
+          <tr><td>⚡ <strong>Performance</strong></td><td>Vitaux &lt; 15 s · SMS &lt; 60 s · Chute &lt; 5 s</td><td><span class="chip blue" style="font-size:10px;">WiFi 802.11n</span><span class="chip amber" style="font-size:10px;">GSM SIM800L</span></td></tr>
+          <tr><td>🛡️ <strong>Sécurité</strong></td><td>JWT + Row-Level Security · Notes confidentielles</td><td><span class="chip teal" style="font-size:10px;">Supabase RLS</span></td></tr>
+          <tr><td>🔗 <strong>Fiabilité</strong></td><td>Transmission stable · SMS sans Internet</td><td><span class="chip amber" style="font-size:10px;">Dual Channel</span></td></tr>
+          <tr><td>🖥️ <strong>Utilisabilité</strong></td><td>Interface pro médecin · Interface simplifiée famille</td><td><span class="chip purple" style="font-size:10px;">Flutter Material 3</span></td></tr>
+          <tr><td>🔧 <strong>Maintenabilité</strong></td><td>Seuils modifiables sans reflasher le firmware</td><td><span class="chip teal" style="font-size:10px;">Edge Functions</span></td></tr>
+          <tr><td>📲 <strong>Portabilité</strong></td><td>Android + iOS natif</td><td><span class="chip purple" style="font-size:10px;">Flutter/Dart</span></td></tr>
+          <tr><td>🔋 <strong>Autonomie</strong></td><td>Batterie &gt; 8 heures en continu</td><td><span class="chip green" style="font-size:10px;">18650 + BMS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 9 — ARCHITECTURE                                        -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="9">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Architecture Globale</div>
+    <div class="slide-num">09 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec on">2. Architecture (6/6)</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Architecture Globale — SeniorCare AI</div>
+      <div class="slide-tag">3 Couches Interconnectées</div>
+      <div style="display:flex;gap:16px;height:calc(100% - 90px);">
+        <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
+          <div class="flow" style="margin-bottom:4px;">
+            <div class="flow-node blue">⌚ Bracelet ESP32</div>
+            <div class="flow-arrow">→ WiFi →</div>
+            <div class="flow-node teal">☁️ Supabase Cloud</div>
+            <div class="flow-arrow">→ WebSocket →</div>
+            <div class="flow-node purple">📱 Flutter App</div>
+          </div>
+          <div style="text-align:center;font-size:11px;color:var(--muted);margin-bottom:6px;">
+            Canal secondaire : SIM800L → <span style="color:var(--amber);">SMS d'urgence autonome (réseau GSM)</span>
+          </div>
+          <div class="img-box" style="flex:1;border-radius:10px;max-height:280px;">
+            <img src="images/archi_global.jpeg" alt="Architecture Globale" style="max-height:280px;">
+          </div>
+        </div>
+        <div style="width:200px;display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+          <div class="card accent-blue" style="padding:10px 12px;">
+            <div class="card-title blue" style="font-size:10px;">Hardware Stack</div>
+            <div style="font-size:10.5px;color:var(--muted);line-height:1.9;">
+              ESP32 · MAX30102<br>MLX90614 · MPU6050<br>SIM800L · NEO-6M<br>OLED · 18650 + BMS
+            </div>
+          </div>
+          <div class="card accent-teal" style="padding:10px 12px;">
+            <div class="card-title teal" style="font-size:10px;">Cloud Stack</div>
+            <div style="font-size:10.5px;color:var(--muted);line-height:1.9;">
+              Supabase · PostgreSQL<br>Edge Functions<br>Realtime · JWT + RLS
+            </div>
+          </div>
+          <div class="card accent-purple" style="padding:10px 12px;">
+            <div class="card-title purple" style="font-size:10px;">App Stack</div>
+            <div style="font-size:10.5px;color:var(--muted);line-height:1.9;">
+              Flutter · Dart<br>Material Design 3<br>HTTP REST · WebSocket
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 10 — SCRUM                                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="10">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Méthodologie Scrum</div>
+    <div class="slide-num">10 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec on">3. Méthodologie (1/2)</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Méthodologie Scrum</div>
+      <div class="slide-tag">Framework Agile · Itératif</div>
+      <div style="display:flex;gap:16px;">
+        <div style="flex:1;">
+          <div class="quote">
+            <strong>Scrum</strong> est un framework agile permettant de résoudre des problèmes complexes de façon adaptative, en fournissant des livrables de haute valeur de manière <strong>itérative et incrémentale</strong>.
+          </div>
+          <table class="tbl" style="margin-bottom:0;">
+            <thead><tr><th>Critère</th><th>Scrum</th><th>Kanban</th><th>XP</th><th>Lean</th></tr></thead>
+            <tbody>
+              <tr><td>Gestion itérative</td><td><span class="ok">✓ Sprints</span></td><td><span class="no">✗</span></td><td><span class="ok">✓</span></td><td><span class="no">✗</span></td></tr>
+              <tr><td>Flexibilité</td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
+              <tr><td>Cadence de livraison</td><td><span class="ok">✓</span></td><td><span class="no">✗</span></td><td><span class="ok">✓</span></td><td><span class="no">✗</span></td></tr>
+              <tr><td>Adaptabilité</td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted);">→ Choix : <strong style="color:var(--amber);">Scrum</strong> — seul framework satisfaisant tous les critères</div>
+        </div>
+        <div style="width:220px;flex-shrink:0;">
+          <div class="img-box" style="height:220px;border-radius:10px;">
+            <img src="images/process_scrum.png" alt="Processus Scrum">
+          </div>
+          <div style="text-align:center;font-size:10px;color:var(--muted);margin-top:6px;">Flux du processus Scrum</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 11 — ÉQUIPE + SPRINTS                                   -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="11">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Équipe & Planification</div>
+    <div class="slide-num">11 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec on">3. Méthodologie (2/2)</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Équipe Scrum · Artefacts · Planification</div>
+      <div class="slide-tag">3 Sprints · 14 Semaines Total</div>
+      <div class="g2" style="margin-bottom:14px;">
+        <div class="card accent-amber">
+          <div class="card-title amber">👥 Équipe Scrum</div>
+          <ul style="list-style:none;font-size:12px;color:var(--muted);line-height:2;">
+            <li><strong style="color:var(--text);">Product Owner</strong> — Racha ZAIBI (Ingénieur R&D)</li>
+            <li><strong style="color:var(--text);">Scrum Master / Dev</strong> — M.A. BEN ABDESSALEM</li>
+            <li><strong style="color:var(--text);">Encadrante</strong> — Rana EZZINE (Maître Assistante)</li>
+          </ul>
+        </div>
+        <div class="card accent-green">
+          <div class="card-title green">📋 Artefacts</div>
+          <ul style="list-style:none;font-size:12px;color:var(--muted);line-height:2;">
+            <li><strong style="color:var(--text);">Product Backlog</strong> — 22 User Stories (MoSCoW)</li>
+            <li><strong style="color:var(--text);">Sprint Backlog</strong> — Tâches techniques par sprint</li>
+            <li><strong style="color:var(--text);">Incrément</strong> — Livrable fonctionnel à chaque sprint</li>
+          </ul>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="sprint s1">
+          <div class="snum">Sprint 1</div>
+          <div class="stitle">Prototype Hardware</div>
+          <div class="sdur">⏱ 6 semaines</div>
+          <ul><li>Schéma PCB — EasyEDA</li><li>Boîtier 3D — SolidWorks</li><li>Intégration capteurs</li><li>Tests breadboard</li></ul>
+        </div>
+        <div class="sprint s2">
+          <div class="snum">Sprint 2</div>
+          <div class="stitle">Application Mobile</div>
+          <div class="sdur">⏱ 5 semaines</div>
+          <ul><li>Flutter + Supabase</li><li>Interface Médecin</li><li>Interface Famille</li><li>Rapport PDF</li></ul>
+        </div>
+        <div class="sprint s3">
+          <div class="snum">Sprint 3</div>
+          <div class="stitle">Intégration & Communication</div>
+          <div class="sdur">⏱ 3 semaines</div>
+          <ul><li>Flux Bracelet→Cloud→App</li><li>Edge Functions</li><li>SMS + Géofencing</li><li>Tests d'intégration</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 12 — CAS D'UTILISATION                                  -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="12">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Étude Conceptuelle</div>
+    <div class="slide-num">12 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec on">4. Étude Conceptuelle (1/2)</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Diagramme des Cas d'Utilisation Global</div>
+      <div class="slide-tag">5 Acteurs · 22 Cas d'utilisation</div>
+      <div style="display:flex;gap:16px;height:calc(100% - 80px);">
+        <div style="flex:1;">
+          <div class="img-box" style="height:100%;border-radius:10px;">
+            <img src="images/case.png" alt="Diagramme des cas d'utilisation">
+          </div>
+        </div>
+        <div style="width:190px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;">
+          <div class="actor"><div class="aico">👴</div><div class="aname">Patient</div><div class="adesc">Bénéficiaire passif — porte le bracelet</div></div>
+          <div class="actor"><div class="aico">🩺</div><div class="aname">Médecin</div><div class="adesc">Gestion clinique, seuils, historiques, PDF</div></div>
+          <div class="actor"><div class="aico">👨‍👩‍👧</div><div class="aname">Famille</div><div class="adesc">Surveillance, localisation, alertes</div></div>
+          <div class="actor"><div class="aico">⌚</div><div class="aname">Bracelet</div><div class="adesc">Acquisition signes vitaux + alertes</div></div>
+          <div class="actor"><div class="aico">☁️</div><div class="aname">Supabase</div><div class="adesc">Auth, stockage, sync temps réel</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 13 — BASE DE DONNÉES                                    -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="13">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Étude Conceptuelle</div>
+    <div class="slide-num">13 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec on">4. Étude Conceptuelle (2/2)</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Structure de la Base de Données</div>
+      <div class="slide-tag">PostgreSQL · Supabase · 7 Tables · RLS</div>
+      <div style="display:flex;gap:16px;height:calc(100% - 80px);">
+        <div style="flex:1;">
+          <div class="img-box" style="height:100%;border-radius:10px;">
+            <img src="images/shema_strucure_BD.png" alt="Schéma Base de Données">
+          </div>
+        </div>
+        <div style="width:200px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">7 Tables</div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>patients</code><span style="color:var(--blue)">Médecin</span></div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>profiles</code><span style="color:var(--green)">Tous</span></div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>vitals</code><span style="color:var(--teal)">Méd+Fam</span></div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>thresholds</code><span style="color:var(--blue)">Médecin</span></div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>alerts</code><span style="color:var(--teal)">Méd+Fam</span></div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>family_access</code><span style="color:var(--blue)">Médecin</span></div>
+          <div style="font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:7px 10px;border-radius:7px;display:flex;justify-content:space-between;"><code>medical_notes</code><span style="color:var(--red)">Médecin seul</span></div>
+          <div style="margin-top:6px;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:8px;padding:8px 10px;font-size:10.5px;color:var(--muted);">
+            🔒 <strong style="color:var(--amber)">RLS activée</strong> — chaque rôle ne voit que ses données
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 14 — RÉALISATION                                        -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="14">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Réalisation</div>
+    <div class="slide-num">14 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec on">5. Réalisation</div>
+      <div class="sidebar-sec">6. Conclusion</div>
+    </div>
+    <div class="content" style="padding:18px 24px;">
+      <div class="slide-title" style="font-size:20px;">Réalisation — Synthèse des 3 Sprints</div>
+      <div class="slide-tag" style="margin-bottom:12px;">Hardware · Mobile · Intégration</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;height:calc(100% - 72px);">
+
+        <!-- Sprint 1 -->
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(74,158,255,.3);padding-bottom:5px;">⌚ Sprint 1 — Hardware</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:1;">
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/sys_globale_en_face.png" alt="Bracelet 3D"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/vue_dessus_3D.png" alt="PCB 3D"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/shematic.png" alt="Schéma PCB"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/esp32jpg.jpg" alt="ESP32"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.7;">PCB double couche · Boîtier SolidWorks<br>ESP32 + MAX30102 + MPU6050 + SIM800L</div>
+        </div>
+
+        <!-- Sprint 2 -->
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(167,139,250,.3);padding-bottom:5px;">📱 Sprint 2 — Application</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:1;">
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/login.jpeg" alt="Login"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/dashboard_medecin.jpeg" alt="Dashboard Médecin"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/dashboard_famille.jpeg" alt="Dashboard Famille"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/in_zone.jpeg" alt="Géofencing"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.7;">Flutter + Supabase · JWT multi-rôles<br>Médecin (PDF) · Famille (GPS + Géofencing)</div>
+        </div>
+
+        <!-- Sprint 3 -->
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(0,212,170,.3);padding-bottom:5px;">☁️ Sprint 3 — Intégration</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:1;">
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/flux.png" alt="Flux données"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/sms_alerte_reel.jpeg" alt="SMS Alerte"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/flux_edge_function.png" alt="Edge Functions"></div>
+            <div class="img-box" style="height:90px;border-radius:7px;"><img src="images/bpm.jpeg" alt="BPM Courbes"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.7;">Bracelet→WiFi→Supabase→App<br>SMS autonome · Edge Functions · &lt;15s latence</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 15 — CONCLUSION                                         -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="15">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Conclusion</div>
+    <div class="slide-num">15 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec on">6. Conclusion (1/2)</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Conclusion</div>
+      <div class="slide-tag">Objectifs atteints · Résultats validés</div>
+      <div class="quote">
+        <strong>SeniorCare AI</strong> est un système de télésurveillance médicale complet couvrant l'intégralité de la chaîne technologique : du capteur biométrique embarqué jusqu'à l'interface mobile de supervision médicale.
+      </div>
+      <ul class="blist" style="margin-bottom:16px;gap:6px;">
+        <li><span class="ico ok">✅</span><div>Bracelet IoT fonctionnel — mesure continue des signes vitaux + détection de chute</div></li>
+        <li><span class="ico ok">✅</span><div>Application Flutter multi-rôles déployée — Interface Médecin + Interface Famille</div></li>
+        <li><span class="ico ok">✅</span><div>Backend Supabase intégré avec Edge Functions serverless et sync temps réel</div></li>
+        <li><span class="ico ok">✅</span><div>SMS d'urgence autonome via GSM — sans dépendance à un service tiers</div></li>
+      </ul>
+      <div class="g4" style="gap:10px;">
+        <div class="metric"><div style="font-size:24px;">💓</div><div><div class="val">&lt;15s</div><div class="lbl">Transmission signes vitaux</div></div></div>
+        <div class="metric"><div style="font-size:24px;">🚨</div><div><div class="val">&lt;5s</div><div class="lbl">Détection de chute</div></div></div>
+        <div class="metric"><div style="font-size:24px;">📱</div><div><div class="val">&lt;60s</div><div class="lbl">SMS d'urgence émis</div></div></div>
+        <div class="metric"><div style="font-size:24px;">🔋</div><div><div class="val">&gt;8h</div><div class="lbl">Autonomie batterie</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 16 — PERSPECTIVES                                       -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="16">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Perspectives</div>
+    <div class="slide-num">16 / 17</div>
+  </div>
+  <div class="slide-body">
+    <div class="sidebar">
+      <div class="sidebar-sec">1. Introduction</div>
+      <div class="sidebar-sec">2. Problématique</div>
+      <div class="sidebar-sec">3. Méthodologie</div>
+      <div class="sidebar-sec">4. Étude Conceptuelle</div>
+      <div class="sidebar-sec">5. Réalisation</div>
+      <div class="sidebar-sec on">6. Perspectives (2/2)</div>
+    </div>
+    <div class="content">
+      <div class="slide-title">Perspectives</div>
+      <div class="slide-tag">Évolutions futures · Feuille de route</div>
+      <div class="g2" style="gap:12px;">
+        <div class="persp-card" style="border-top:2px solid var(--blue);">
+          <div class="ptitle">🤖 TinyML sur ESP32</div>
+          <div class="pdesc">Intégration d'algorithmes de machine learning embarqués pour une analyse prédictive des épisodes critiques directement sur le microcontrôleur, sans latence réseau.</div>
+        </div>
+        <div class="persp-card" style="border-top:2px solid var(--red);">
+          <div class="ptitle">❤️ Module ECG</div>
+          <div class="pdesc">Ajout d'un électrocardiogramme pour un diagnostic cardiovasculaire affiné, permettant la détection des arythmies et des anomalies cardiaques complexes.</div>
+        </div>
+        <div class="persp-card" style="border-top:2px solid var(--teal);">
+          <div class="ptitle">🏥 Architecture Multi-patients</div>
+          <div class="pdesc">Déploiement dans des établissements de soins professionnels (EHPAD) avec gestion simultanée de plusieurs patients par une équipe médicale.</div>
+        </div>
+        <div class="persp-card" style="border-top:2px solid var(--purple);">
+          <div class="ptitle">📲 Extension iOS</div>
+          <div class="pdesc">L'application étant développée en Flutter, la portabilité native vers iOS ne nécessite aucune refonte majeure — prête pour un déploiement multi-plateforme.</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--muted);font-style:italic;padding:10px 20px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border);">
+        "Une assistance médicale connectée, intelligente et proactive — au service du maintien à domicile des personnes âgées."
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 17 — MERCI                                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-n="17">
+  <div class="topbar">
+    <div class="topbar-left"><div class="isitcom-badge"><span>ISITCOM · Université de Sousse</span></div></div>
+    <div class="topbar-title">Fin de présentation</div>
+    <div class="slide-num">17 / 17</div>
+  </div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;
+              background:radial-gradient(ellipse at 40% 50%,rgba(74,158,255,.1) 0%,transparent 60%),
+                         radial-gradient(ellipse at 80% 30%,rgba(0,212,170,.07) 0%,transparent 50%),var(--bg);">
+    <div style="text-align:center;">
+      <div style="font-size:56px;font-weight:900;color:var(--amber);margin-bottom:10px;letter-spacing:-1px;">Merci de votre attention</div>
+      <div style="font-size:18px;color:var(--muted);margin-bottom:40px;">Questions &amp; Échanges</div>
+      <div style="display:inline-flex;gap:28px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 36px;">
+        <div style="text-align:center;">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--amber);margin-bottom:7px;">Réalisé par</div>
+          <div style="font-size:14px;font-weight:700;">Mohammed Akrem BEN ABDESSALEM</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div style="text-align:center;">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--amber);margin-bottom:7px;">Projet</div>
+          <div style="font-size:14px;font-weight:700;">SeniorCare AI</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div style="text-align:center;">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--amber);margin-bottom:7px;">Année</div>
+          <div style="font-size:14px;font-weight:700;">2025 — 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── NAVIGATION ── -->
+<div class="nav">
+  <button class="nbtn" id="pb" onclick="go(-1)" disabled>◀ Précédent</button>
+  <div class="dots" id="dots"></div>
+  <button class="nbtn" id="nb" onclick="go(1)">Suivant ▶</button>
+</div>
+<div class="kh">← → Navigation · F Plein écran</div>
+
+<script src="navigation.js"></script>
+</body>
+</html>

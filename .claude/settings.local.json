@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(start \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\SeniorCare_AI_Presentation_Content.md\")",
+      "Bash(start \"c:\\\\Users\\\\MSI\\\\Downloads\\\\presentation\\\\SeniorCare_AI_Presentation.html\")"
+    ]
+  }
+}
